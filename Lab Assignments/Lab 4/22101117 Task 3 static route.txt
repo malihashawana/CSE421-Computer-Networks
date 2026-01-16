@@ -1,0 +1,56 @@
+C:\>ping 172.31.0.254 
+C:\>ping 172.31.1.190 
+
+R1>en
+R1#conf t
+R1(config)#ip route 172.31.0.0 255.255.255.0 172.31.1.193
+R1(config)#ip route 172.31.1.196 255.255.255.252 172.31.1.193
+R1(config)#ip route 172.31.1.128 255.255.255.192 172.31.1.193
+R1(config)#exit
+
+pc1
+C:\>ping 172.31.0.254
+C:\>ping 172.31.1.190 
+
+R2>en
+R2#conf t
+R2(config)#ip route 172.31.1.0 255.255.255.128 s0/0/0
+R2(config)#ip route 172.31.1.128 255.255.255.192 s0/0/1
+R2#show ip route
+R2#show ip route connected
+R2#show ip route static
+
+R3>en
+R3#conf t
+R3(config)#ip route 0.0.0.0 0.0.0.0 s0/0/1
+R3#show ip route
+R3#show ip route connected
+R3#show ip route static
+
+PC1
+C:\>ping 172.31.0.254
+Pinging 172.31.0.254 with 32 bytes of data:
+Reply from 172.31.0.254: bytes=32 time=4ms TTL=126
+Reply from 172.31.0.254: bytes=32 time=13ms TTL=126
+Reply from 172.31.0.254: bytes=32 time=1ms TTL=126
+Reply from 172.31.0.254: bytes=32 time=1ms TTL=126
+Ping statistics for 172.31.0.254:
+Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+Minimum = 1ms, Maximum = 13ms, Average = 4ms
+C:\>ping 172.31.1.190
+Pinging 172.31.1.190 with 32 bytes of data:
+Request timed out.
+Reply from 172.31.1.190: bytes=32 time=2ms TTL=125
+Reply from 172.31.1.190: bytes=32 time=2ms TTL=125
+Reply from 172.31.1.190: bytes=32 time=2ms TTL=125
+Ping statistics for 172.31.1.190:
+Packets: Sent = 4, Received = 3, Lost = 1 (25% loss),
+Approximate round trip times in milli-seconds:
+Minimum = 2ms, Maximum = 2ms, Average = 2ms
+C:\>tracert 172.31.0.254
+Tracing route to 172.31.0.254 over a maximum of 30 hops:
+1 0 ms 0 ms 0 ms 172.31.1.1
+2 0 ms 1 ms 0 ms 172.31.1.193
+3 0 ms 0 ms 0 ms 172.31.0.254
+Trace complete.
